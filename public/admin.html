@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Rangat — desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,ital,wght@6..96,0,400;6..96,0,500;6..96,1,400&family=Noto+Serif+Devanagari:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --khadi:#EDE4D4; --paper:#F7F1E6; --ink:#16110D; --mute:#5C5148; --faint:#8A7D72;
+  --rule:#16110D; --hair:#C9BBA8; --dye:#8C1F18; --dye-wash:#F3E4D9;
+  --ok:#1F5C3A; --ok-wash:#DCE8DF; --warn:#7A4A12; --warn-wash:#F3E4D9;
+  --leaf:var(--ok); --ink-3:var(--faint);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--khadi);color:var(--ink);font-family:"Public Sans",system-ui,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:"Bodoni Moda",Georgia,serif;font-weight:400;margin:0;line-height:1.1;letter-spacing:-.02em}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--dye);outline-offset:2px}
+.wrap{
+  max-width:1100px;margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left));
+  padding-right:max(16px, env(safe-area-inset-right));
+}
+@media(min-width:800px){
+  .wrap{
+    padding-left:max(28px, env(safe-area-inset-left));
+    padding-right:max(28px, env(safe-area-inset-right));
+  }
+}
+
+.wordmark{display:flex;flex-direction:column;line-height:1;text-decoration:none;color:inherit;min-width:0}
+.wordmark .dev{font-family:"Noto Serif Devanagari",serif;font-size:12px;color:var(--dye)}
+.wordmark .lat{font-family:"Bodoni Moda",serif;font-size:22px}
+@media(min-width:800px){.wordmark .lat{font-size:26px}}
+
+header{position:sticky;top:0;z-index:20;background:var(--khadi);border-bottom:1px solid var(--rule)}
+.hbar{
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  align-items:center;
+  gap:8px 10px;
+  min-height:56px;
+  padding:8px 0;
+}
+.desk{display:none}
+.tabs{grid-column:1/-1;display:flex;gap:0;border-top:1px solid var(--hair)}
+.tab{background:none;border:0;border-bottom:2px solid transparent;padding:12px 14px;font-size:13px;color:var(--mute);letter-spacing:.04em;flex:1;text-align:center}
+.tab[aria-selected=true]{color:var(--ink);border-bottom-color:var(--dye)}
+@media(min-width:800px){
+  .hbar{display:flex;flex-wrap:nowrap;gap:16px;min-height:64px;padding:0}
+  .desk{display:inline;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-right:auto}
+  .tabs{grid-column:auto;border-top:0;flex:none}
+  .tab{flex:none;text-align:left;padding:8px 14px}
+}
+.btn{padding:9px 14px;border:1px solid var(--rule);border-radius:0;font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:transparent}
+.btn-pri{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn-pri:hover{background:var(--dye);border-color:var(--dye)}
+.btn-ghost{background:transparent}
+.btn-ghost:hover{background:var(--ink);color:var(--paper)}
+.btn-danger{background:var(--dye-wash);color:var(--dye);border-color:var(--dye)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+main{padding:28px 0 88px}
+.panel{display:none}.panel.on{display:block}
+.card{background:var(--paper);border:1px solid var(--rule);border-radius:0;padding:18px;margin-bottom:16px;box-shadow:none}
+.prow{display:grid;grid-template-columns:1fr;gap:18px}
+@media(min-width:760px){.prow{grid-template-columns:280px 1fr}}
+.pmeta{display:flex;flex-direction:column;gap:12px}
+.chead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--hair)}
+.chead h2{font-family:"Public Sans",sans-serif;font-size:16px;font-weight:600;letter-spacing:0}
+.pid{font-size:11px;font-weight:700;letter-spacing:.12em;padding:3px 0;color:var(--dye)}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.field input,.field textarea,.field select{
+  padding:10px 0;border:0;border-bottom:1px solid var(--rule);border-radius:0;
+  background:transparent;font:inherit;font-size:16px;width:100%
+}
+.field textarea{resize:vertical;min-height:70px;border:1px solid var(--rule);padding:8px 10px;margin-top:4px}
+.g2{display:grid;grid-template-columns:1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:520px){.g2{grid-template-columns:1fr 1fr}}
+@media(min-width:640px){.g3{grid-template-columns:1fr 1fr}}
+@media(min-width:900px){.g3{grid-template-columns:1fr 1fr 1fr}}
+.calc{font-size:12.5px;color:var(--ok);font-weight:700;font-variant-numeric:tabular-nums}
+.drop{border:1px dashed var(--rule);padding:18px;text-align:center;color:var(--faint);font-size:13.5px;cursor:pointer;background:var(--khadi)}
+.drop.over{background:var(--dye-wash);color:var(--dye)}
+.drop b{color:var(--ink);display:block;letter-spacing:.06em;text-transform:uppercase;font-size:11px;margin-bottom:4px}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin-bottom:12px}
+.shot{position:relative;aspect-ratio:3/4;overflow:hidden;border:1px solid var(--rule);background:var(--dye-wash)}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot .x{position:absolute;top:0;right:0;width:22px;height:22px;border:0;border-left:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--paper);color:var(--ink);font-size:14px;line-height:1;cursor:pointer}
+.shot .main{position:absolute;bottom:0;left:0;right:0;background:var(--ink);color:var(--paper);font-size:9px;font-weight:700;letter-spacing:.12em;text-align:center;padding:3px}
+.shot .mv{position:absolute;bottom:0;left:0}
+.shot .mv button{width:22px;height:22px;border:0;border-right:1px solid var(--rule);border-top:1px solid var(--rule);background:var(--paper);font-size:11px;cursor:pointer}
+.sizes{display:flex;gap:6px;flex-wrap:wrap}
+.sz{padding:7px 11px;border:1px solid var(--rule);background:var(--paper);font-size:12.5px;font-weight:600;cursor:pointer}
+.sz.out{background:var(--dye-wash);border-color:var(--dye);color:var(--dye);text-decoration:line-through}
+
+.bar{position:fixed;bottom:0;left:0;right:0;background:var(--paper);border-top:1px solid var(--rule);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center;z-index:30;flex-wrap:wrap}
+.bar .msg{margin-right:auto;font-size:13px;color:var(--mute);flex:1 1 160px}
+.bar .btn{flex:none;min-height:44px}
+.bar .msg.ok{color:var(--ok);font-weight:600}
+.bar .msg.err{color:var(--dye);font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:10px 10px;border-bottom:1px solid var(--hair);text-align:left;vertical-align:top}
+th{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:700}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.tblscroll{overflow-x:auto}
+
+.pill{font-size:10px;font-weight:700;letter-spacing:.1em;padding:4px 8px;border:1px solid var(--rule);background:transparent;color:var(--ink);cursor:pointer;font-family:inherit;text-transform:uppercase}
+.pill.NEW{background:var(--warn-wash);border-color:var(--warn);color:var(--warn)}
+.pill.CONFIRMED{background:var(--ok-wash);border-color:var(--ok);color:var(--ok)}
+.pill.CANCELLED{background:var(--dye-wash);border-color:var(--dye);color:var(--dye)}
+
+.login{min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:24px 16px;overflow-y:auto}
+.login .card{max-width:360px;width:100%;padding:28px 20px}
+@media(min-width:480px){.login .card{padding:32px 28px}}
+.chead h2{min-width:0;overflow-wrap:anywhere}
+.card{overflow:visible}
+.tblscroll{-webkit-overflow-scrolling:touch}
+html,body{overflow-x:clip;overflow-y:auto}
+.login .wordmark{align-items:flex-start;margin-bottom:8px}
+.login h1{font-size:36px;font-style:italic;margin:12px 0 6px}
+.login p{color:var(--mute);font-size:14px;margin:0 0 22px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:18px;border:1px solid var(--rule)}
+.stat{background:var(--paper);padding:14px 16px;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.stat:nth-child(2n){border-right:0}
+.stat:last-child:nth-child(odd){grid-column:1/-1;border-right:0}
+@media(min-width:800px){
+  .stats{grid-template-columns:repeat(5,1fr)}
+  .stat{border-bottom:0;border-right:1px solid var(--hair)}
+  .stat:nth-child(2n){border-right:1px solid var(--hair)}
+  .stat:last-child{border-right:0}
+}
+.stat b{display:block;font-size:26px;font-variant-numeric:tabular-nums;font-family:"Bodoni Moda",serif;font-weight:400}
+.stat span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.hint{font-size:12.5px;color:var(--faint);margin:8px 0 0}
+.tools{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+a.store{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);text-decoration:none;border-bottom:1px solid var(--hair)}
+a.store:hover{color:var(--dye);border-bottom-color:var(--dye)}
+[hidden],#login[hidden],#app[hidden],.login[hidden]{display:none!important}
+#app[hidden] .bar{display:none!important}
+</style>
+</head>
+<body>
+
+<div id="login" class="login">
+  <div class="card">
+    <span class="wordmark"><span class="dev">रंगत</span><span class="lat">Rangat</span></span>
+    <h1>The desk</h1>
+    <p>Catalogue, orders, cash. Not the shop floor.</p>
+    <form id="loginForm">
+      <div class="field"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password"></div>
+      <button class="btn btn-pri" id="loginBtn" type="submit" style="width:100%;margin-top:18px">Sign in</button>
+      <p class="hint" id="loginErr"></p>
+    </form>
+  </div>
+</div>
+
+<div id="app" hidden>
+<header><div class="wrap hbar">
+  <a class="wordmark" href="/"><span class="dev">रंगत</span><span class="lat">Rangat</span></a>
+  <span class="desk">Desk</span>
+  <div class="tabs">
+    <button class="tab" data-panel="products" aria-selected="true">Looks</button>
+    <button class="tab" data-panel="orders" aria-selected="false">Orders</button>
+  </div>
+  <a class="store" href="/" target="_blank" rel="noopener">Store ↗</a>
+  <button class="btn btn-ghost" id="outBtn">Sign out</button>
+</div></header>
+
+<main class="wrap">
+  <div class="panel on" id="p-products">
+    <div class="tools">
+      <button class="btn btn-ghost" id="addBtn">+ New look</button>
+      <button class="btn btn-ghost" id="reprice">Reprice all at 65%</button>
+    </div>
+    <div id="list"></div>
+  </div>
+
+  <div class="panel" id="p-orders">
+    <div class="stats" id="stats"></div>
+    <div class="card"><div class="tblscroll"><table id="otbl"></table></div></div>
+  </div>
+</main>
+
+<div class="bar">
+  <span class="msg" id="msg">Drop images on a look. Nothing is live until you Save.</span>
+  <button class="btn btn-pri" id="saveBtn">Save all</button>
+</div>
+</div>
+
+<script>
+const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const INR=n=>"₹"+Number(n||0).toLocaleString("en-IN");
+const SIZES=["XS","S","M","L","XL","XXL"];
+let PRODUCTS=[], ORDERS=[], dirty=false;
+
+function msg(t,cls){const m=$("#msg");m.textContent=t;m.className="msg "+(cls||"");}
+function markDirty(){dirty=true;msg("Unsaved — Save all to publish","err");}
+const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+async function checkAuth(){
+  try{
+    const r=await fetch("/api/admin/me",{credentials:"same-origin"});
+    if(r.ok){$("#login").hidden=true;$("#app").hidden=false;await loadAll(); return;}
+  }catch(e){}
+  $("#login").hidden=false;$("#app").hidden=true;
+}
+async function doLogin(e){
+  if(e) e.preventDefault();
+  $("#loginErr").textContent="";
+  $("#loginBtn").disabled=true;
+  try{
+    const r=await fetch("/api/admin/login",{method:"POST",credentials:"same-origin",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({password:$("#pw").value})});
+    if(r.ok) await checkAuth();
+    else $("#loginErr").textContent="Wrong password.";
+  }catch(err){
+    $("#loginErr").textContent="Can't reach the server. Is it running?";
+  }
+  $("#loginBtn").disabled=false;
+}
+$("#loginForm").addEventListener("submit", doLogin);
+$("#outBtn").onclick=async()=>{await fetch("/api/admin/logout",{method:"POST"});location.reload();};
+
+$$(".tab").forEach(t=>t.onclick=()=>{
+  $$(".tab").forEach(x=>x.setAttribute("aria-selected",String(x===t)));
+  $$(".panel").forEach(x=>x.classList.remove("on"));
+  $("#p-"+t.dataset.panel).classList.add("on");
+});
+
+async function loadAll(){
+  const [pr,or]=await Promise.all([
+    fetch("/api/admin/products",{credentials:"same-origin"}).then(r=>r.json()),
+    fetch("/api/admin/orders",{credentials:"same-origin"}).then(r=>r.json())
+  ]);
+  PRODUCTS=Array.isArray(pr)?pr:[];
+  ORDERS=Array.isArray(or)?or:[];
+  renderProducts(); renderOrders();
+}
+
+function resize(file,maxW=900,maxH=1200,q=0.82){
+  return new Promise((res,rej)=>{
+    const img=new Image(), url=URL.createObjectURL(file);
+    img.onload=()=>{
+      URL.revokeObjectURL(url);
+      let {width:w,height:h}=img;
+      const s=Math.min(maxW/w,maxH/h,1); w=Math.round(w*s); h=Math.round(h*s);
+      const c=document.createElement("canvas"); c.width=w; c.height=h;
+      const ctx=c.getContext("2d");
+      ctx.fillStyle="#fff"; ctx.fillRect(0,0,w,h);
+      ctx.drawImage(img,0,0,w,h);
+      c.toBlob(b=>b?res(b):rej(new Error("encode failed")),"image/jpeg",q);
+    };
+    img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error("not an image"));};
+    img.src=url;
+  });
+}
+async function uploadFiles(prod,files){
+  const imgs=[...files].filter(f=>/^image\//.test(f.type));
+  if(!imgs.length){msg("Those weren't images","err");return;}
+  msg(`Uploading ${imgs.length} image${imgs.length>1?"s":""}...`);
+  let done=0;
+  for(const f of imgs){
+    try{
+      const blob=await resize(f);
+      const r=await fetch(`/api/admin/upload?id=${encodeURIComponent(prod.id)}&ext=jpg`,
+        {method:"POST",headers:{"Content-Type":"image/jpeg"},body:blob});
+      const j=await r.json();
+      if(j.ok){ (prod.img=prod.img||[]).push(j.url); done++; }
+    }catch(e){ console.error(e); }
+  }
+  renderProducts();
+  msg(`${done} image${done!==1?"s":""} on the look — Save all to publish`,"ok");
+  dirty=true;
+}
+
+function renderProducts(){
+  $("#list").innerHTML=PRODUCTS.map((p,i)=>`
+   <div class="card" data-i="${i}">
+    <div class="chead">
+      <span class="pid">${esc(p.id)}</span>
+      <h2>${esc(p.name||"Untitled")}</h2>
+      <span class="calc">margin ${INR((p.price||0)-(p.cost||0))}</span>
+      <button class="btn btn-danger" data-del="${i}" style="margin-left:auto;padding:5px 12px;font-size:11px">Delete</button>
+    </div>
+    <div class="prow">
+      <div>
+        <div class="shots" id="shots-${i}">${(p.img||[]).map((u,j)=>`
+          <div class="shot">
+            <img src="${esc(u)}" alt="">
+            <button class="x" data-rm="${i}:${j}" title="Remove">×</button>
+            ${j===0?'<span class="main">MAIN</span>':`<span class="mv"><button data-up="${i}:${j}" title="Move earlier">←</button></span>`}
+          </div>`).join("")}</div>
+        <div class="drop" data-drop="${i}">
+          <b>Drop cloth photos</b>
+          or click to choose
+        </div>
+        <p class="hint">First frame is what shoppers see. Cropped to 900×1200 in the browser.</p>
+      </div>
+      <div class="pmeta">
+        <div class="field"><label>Look name</label><input data-f="${i}:name" value="${esc(p.name)}"></div>
+        <div class="g3">
+          <div class="field"><label>You pay</label><input type="number" data-f="${i}:cost" value="${p.cost||0}"></div>
+          <div class="field"><label>They pay</label><input type="number" data-f="${i}:price" value="${p.price||0}"></div>
+          <div class="field"><label>Cut</label><input data-f="${i}:cat" value="${esc(p.cat)}"></div>
+        </div>
+        <div class="g2">
+          <div class="field"><label>Cloth</label><input data-f="${i}:fabric" value="${esc(p.fabric)}"></div>
+          <div class="field"><label>On the floor</label>
+            <select data-f="${i}:active">
+              <option value="true"${p.active!==false?" selected":""}>Live</option>
+              <option value="false"${p.active===false?" selected":""}>Held</option>
+            </select></div>
+        </div>
+        <div class="field"><label>Note</label><textarea data-f="${i}:desc">${esc(p.desc)}</textarea></div>
+        <div class="field"><label>Sizes — click to mark out</label>
+          <div class="sizes">${SIZES.map(s=>`<button class="sz ${(p.sold||[]).includes(s)?"out":""}" data-sz="${i}:${s}">${s}</button>`).join("")}</div>
+        </div>
+        <div class="field"><label>Supplier link (never shown)</label><input data-f="${i}:source" value="${esc(p.source)}"></div>
+      </div>
+    </div>
+   </div>`).join("");
+
+  $$("[data-f]").forEach(el=>el.oninput=()=>{
+    const [i,k]=el.dataset.f.split(":");
+    let v=el.value;
+    if(k==="cost"||k==="price") v=parseInt(v,10)||0;
+    if(k==="active") v=(v==="true");
+    PRODUCTS[i][k]=v; markDirty();
+    if(k==="cost"||k==="price"){
+      const c=el.closest(".card").querySelector(".calc");
+      c.textContent="margin "+INR((PRODUCTS[i].price||0)-(PRODUCTS[i].cost||0));
+    }
+  });
+  $$("[data-sz]").forEach(b=>b.onclick=()=>{
+    const [i,s]=b.dataset.sz.split(":");
+    const p=PRODUCTS[i]; p.sold=p.sold||[];
+    const k=p.sold.indexOf(s); k<0?p.sold.push(s):p.sold.splice(k,1);
+    b.classList.toggle("out"); markDirty();
+  });
+  $$("[data-rm]").forEach(b=>b.onclick=async()=>{
+    const [i,j]=b.dataset.rm.split(":").map(Number);
+    const url=PRODUCTS[i].img[j];
+    PRODUCTS[i].img.splice(j,1);
+    await fetch("/api/admin/image",{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({url})});
+    renderProducts(); markDirty();
+  });
+  $$("[data-up]").forEach(b=>b.onclick=()=>{
+    const [i,j]=b.dataset.up.split(":").map(Number);
+    const a=PRODUCTS[i].img; [a[j-1],a[j]]=[a[j],a[j-1]];
+    renderProducts(); markDirty();
+  });
+  $$("[data-del]").forEach(b=>b.onclick=()=>{
+    const i=Number(b.dataset.del);
+    if(confirm("Delete "+PRODUCTS[i].name+"?")){PRODUCTS.splice(i,1);renderProducts();markDirty();}
+  });
+  $$("[data-drop]").forEach(d=>{
+    const i=Number(d.dataset.drop);
+    d.onclick=()=>{const f=document.createElement("input");f.type="file";f.multiple=true;f.accept="image/*";
+      f.onchange=()=>uploadFiles(PRODUCTS[i],f.files);f.click();};
+    d.ondragover=e=>{e.preventDefault();d.classList.add("over");};
+    d.ondragleave=()=>d.classList.remove("over");
+    d.ondrop=e=>{e.preventDefault();d.classList.remove("over");uploadFiles(PRODUCTS[i],e.dataTransfer.files);};
+  });
+}
+
+$("#addBtn").onclick=()=>{
+  const n=PRODUCTS.length+1;
+  PRODUCTS.push({id:"RG"+String(n).padStart(2,"0")+Date.now().toString(36).slice(-3),
+    name:"New kurti",cat:"Short Kurti",fabric:"Cotton blend",cost:0,price:0,mrp:null,
+    img:[],hue:210,rating:4,reviews:0,pop:50,isNew:true,sold:[],source:"",desc:"",active:true});
+  renderProducts(); markDirty();
+  window.scrollTo(0,document.body.scrollHeight);
+};
+$("#reprice").onclick=()=>{
+  PRODUCTS.forEach(p=>{ if(p.cost) p.price=Math.round((p.cost*1.65-1)/10)*10+9; });
+  renderProducts(); markDirty(); msg("Repriced at 65% — Save all to publish","ok");
+};
+$("#saveBtn").onclick=async()=>{
+  $("#saveBtn").disabled=true; msg("Saving...");
+  const r=await fetch("/api/admin/products",{method:"PUT",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(PRODUCTS)});
+  $("#saveBtn").disabled=false;
+  if(r.ok){dirty=false;msg("Saved — live on the store","ok");}
+  else msg("Save failed","err");
+};
+window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue="";}});
+
+function renderOrders(){
+  const today=new Date().toISOString().slice(0,10);
+  const t=ORDERS.filter(o=>(o.placedAt||"").slice(0,10)===today);
+  const money=a=>a.reduce((s,o)=>s+(o.total||0),0);
+  const marg =a=>a.reduce((s,o)=>s+(o.margin||0),0);
+  $("#stats").innerHTML=`
+    <div class="stat"><span>Orders today</span><b>${t.length}</b></div>
+    <div class="stat"><span>Cash today</span><b>${INR(money(t))}</b></div>
+    <div class="stat"><span>Margin today</span><b>${INR(marg(t))}</b></div>
+    <div class="stat"><span>Orders all time</span><b>${ORDERS.length}</b></div>
+    <div class="stat"><span>Margin all time</span><b>${INR(marg(ORDERS))}</b></div>`;
+  $("#otbl").innerHTML=ORDERS.length? `
+    <thead><tr><th>When</th><th>Order</th><th>Status</th><th>Customer</th><th>Deliver to</th><th>Items</th><th>Total</th><th>Margin</th></tr></thead>
+    <tbody>${ORDERS.map(o=>`<tr>
+      <td class="num">${new Date(o.placedAt).toLocaleString("en-IN",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}</td>
+      <td class="num">${esc(o.orderId)}</td>
+      <td><button class="pill ${esc(o.status)}" data-st="${esc(o.orderId)}">${esc(o.status)}</button></td>
+      <td>${esc(o.name)}<br><span style="color:var(--faint)">${esc(o.phone)}</span></td>
+      <td style="max-width:220px">${esc(o.address)}<br>${esc(o.city)} — ${esc(o.pincode)}</td>
+      <td style="max-width:260px;white-space:pre-line">${esc(o.items)}</td>
+      <td class="num"><b>${INR(o.total)}</b></td>
+      <td class="num" style="color:var(--ok);font-weight:700">${INR(o.margin)}</td>
+    </tr>`).join("")}</tbody>`
+    : '<tbody><tr><td style="padding:40px;text-align:center;color:var(--faint)">No orders yet.</td></tr></tbody>';
+  $$("[data-st]").forEach(b=>b.onclick=async()=>{
+    const next={NEW:"CONFIRMED",CONFIRMED:"CANCELLED",CANCELLED:"NEW"}[b.textContent.trim()]||"NEW";
+    await fetch("/api/admin/order-status",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({orderId:b.dataset.st,status:next})});
+    ORDERS=await (await fetch("/api/admin/orders")).json(); renderOrders();
+  });
+}
+checkAuth();
+</script>
+</body>
+</html>

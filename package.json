@@ -1,0 +1,9 @@
+{
+  "name": "rangat-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Rangat - kurti store, admin panel and COD orders. Zero dependencies.",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}

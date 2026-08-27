@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rangat — Cotton kurtis, cash on delivery</title>
+<meta name="description" content="A small catalogue of cotton and rayon kurtis. Open the parcel first. Pay the agent in cash. Sizes XS–XXL, India-wide COD.">
+<meta property="og:title" content="Rangat — Cotton kurtis, cash on delivery">
+<meta property="og:description" content="Open the parcel. Check the stitch. Then pay cash.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,ital,wght@6..96,0,400;6..96,0,500;6..96,0,700;6..96,1,400&family=Noto+Serif+Devanagari:wght@500;600&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#shop">Skip to catalogue</a>
+
+<div class="mast">
+  <p>Cash on delivery · India · 7-day return with pickup · Free ship over ₹699</p>
+</div>
+
+<header class="site">
+  <div class="wrap hbar">
+    <a class="wordmark" href="#top">
+      <span class="dev">रंगत</span>
+      <span class="lat">Rangat</span>
+    </a>
+    <nav class="hnav" aria-label="Store">
+      <a href="#shop">Catalogue</a>
+      <a href="#how">How COD works</a>
+      <button type="button" id="sizeGuideTop">Size</button>
+    </nav>
+    <label class="hfind">
+      <span class="sr">Search</span>
+      <input id="q" type="search" placeholder="Fabric, print, colour…" autocomplete="off">
+    </label>
+    <button class="bagbtn" id="cartBtn" type="button" aria-label="Open bag">
+      Bag <span class="bag-n" id="cartDot" hidden>0</span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero wrap">
+    <div class="hero-copy">
+      <p class="kicker">Lookbook 01 · 2026</p>
+      <h1>Colour first.<br>Cash later.</h1>
+      <p class="lede">Rangat is a short run of cotton kurtis — corset backs, buti prints, bell sleeves. You open the parcel at the door. If the stitch and the fit hold, you pay the agent. Nothing leaves your account before that.</p>
+      <div class="hero-acts">
+        <a class="btn ink" href="#shop">Open the catalogue</a>
+        <button class="btn line" type="button" id="howBtn">How cash on delivery works</button>
+      </div>
+      <dl class="facts">
+        <div><dt>Payment</dt><dd>Cash only, at the door</dd></div>
+        <div><dt>Sizing</dt><dd>Indian XS–XXL, garment measures</dd></div>
+        <div><dt>Returns</dt><dd>7 days, pickup on us</dd></div>
+      </dl>
+    </div>
+    <figure class="hero-look" id="heroLook">
+      <button type="button" class="hero-frame" id="heroFrame" aria-label="Featured kurti">
+        <div class="hero-img" id="heroArt"></div>
+        <span class="hero-cap" id="heroCap"></span>
+      </button>
+    </figure>
+    <ol class="index" id="lookIndex" aria-label="Catalogue index"></ol>
+  </section>
+
+  <section class="how wrap" id="how">
+    <h2>Three steps. No app. No UPI.</h2>
+    <ol class="steps-how">
+      <li><span>01</span><b>Pick a look</b><p>Size by the garment chart, not by a brand’s vanity label.</p></li>
+      <li><span>02</span><b>We stitch-check and ship</b><p>1–2 days out. 4–7 days to most pincodes.</p></li>
+      <li><span>03</span><b>Open, then pay</b><p>Cash to the delivery agent. Keep the exact amount ready.</p></li>
+    </ol>
+  </section>
+
+  <div class="rail" id="shop">
+    <div class="wrap rail-in">
+      <label class="mfind">
+        <span class="sr">Search</span>
+        <input id="qm" type="search" placeholder="Search the catalogue" autocomplete="off">
+      </label>
+      <div class="rail-row">
+        <div class="chips" id="cats" role="group" aria-label="Filter by cut"></div>
+        <div class="sels">
+          <label class="sr" for="sortSel">Sort</label>
+          <select id="sortSel">
+            <option value="pop">Listed as</option>
+            <option value="lo">Price ↑</option>
+            <option value="hi">Price ↓</option>
+            <option value="off">Steepest cut</option>
+            <option value="new">New in</option>
+          </select>
+          <label class="sr" for="priceSel">Price</label>
+          <select id="priceSel">
+            <option value="all">Any price</option>
+            <option value="0-399">Under ₹400</option>
+            <option value="400-599">₹400–599</option>
+            <option value="600-899">₹600–899</option>
+            <option value="900-99999">₹900+</option>
+          </select>
+          <div class="view" role="group" aria-label="Layout">
+            <button type="button" class="viewbtn" id="viewGrid" aria-pressed="true">Grid</button>
+            <button type="button" class="viewbtn" id="viewList" aria-pressed="false">List</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="wrap cat-sec">
+    <header class="cat-head">
+      <h2 id="gridTitle">The catalogue</h2>
+      <p class="count" id="count"></p>
+    </header>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <p class="wordmark foot-mark"><span class="dev">रंगत</span><span class="lat">Rangat</span></p>
+        <p class="fnote">A small ethnicwear desk. Cotton first. Cash on delivery to most Indian pincodes.</p>
+      </div>
+      <div>
+        <h4>Catalogue</h4>
+        <ul>
+          <li><a href="#shop" data-jump="new">New in</a></li>
+          <li><a href="#shop" data-price="0-399">Under ₹400</a></li>
+          <li><a href="#shop" data-cat="Corset Back">Corset back</a></li>
+          <li><a href="#shop" data-cat="Short Kurti">Short kurti</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Desk</h4>
+        <ul>
+          <li><button type="button" id="sizeGuideFoot">Size chart</button></li>
+          <li><a href="#how">Cash on delivery</a></li>
+          <li><a href="#how">Returns</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Measure once</h4>
+        <p class="fnote">Bust of the garment is listed in inches. If you sit between two sizes, take the larger. Tags stay on for returns.</p>
+      </div>
+    </div>
+    <p class="fbot"><span>© 2026 Rangat</span><span>Pay the agent. Not a link.</span></p>
+  </div>
+</footer>
+
+<div class="mobbar">
+  <div class="info"><b id="mobTotal">₹0</b><span id="mobCount">Bag empty</span></div>
+  <button class="btn ink" type="button" id="mobCheckout">Bag</button>
+</div>
+
+<div class="scrim" id="scrim"></div>
+
+<aside class="sheet" id="guide" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+  <div class="shead">
+    <h2 id="guideTitle">Garment chart</h2>
+    <button class="x" data-close type="button" aria-label="Close">×</button>
+  </div>
+  <div class="sbody">
+    <p>These are <em>garment</em> measures, not body measures. A tape at the fullest bust, over a fitted blouse, is the honest check.</p>
+    <div class="tblscroll">
+      <table class="chart">
+        <thead><tr><th>Size</th><th>Bust</th><th>Waist</th><th>Length (short)</th></tr></thead>
+        <tbody>
+          <tr><td>XS</td><td>32″</td><td>34″</td><td>42″</td></tr>
+          <tr><td>S</td><td>34″</td><td>36″</td><td>42″</td></tr>
+          <tr><td>M</td><td>36″</td><td>38″</td><td>42″</td></tr>
+          <tr><td>L</td><td>38″</td><td>40″</td><td>42″</td></tr>
+          <tr><td>XL</td><td>40″</td><td>42″</td><td>42″</td></tr>
+          <tr><td>XXL</td><td>42″</td><td>44″</td><td>42″</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</aside>
+
+<aside class="sheet wide" id="detail" role="dialog" aria-modal="true" aria-label="Look">
+  <div class="shead">
+    <h2>Look</h2>
+    <button class="x" data-close type="button" aria-label="Close">×</button>
+  </div>
+  <div class="sbody" id="detailBody"></div>
+</aside>
+
+<aside class="sheet" id="cart" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+  <div class="shead">
+    <h2 id="cartTitle">Bag</h2>
+    <button class="x" data-close type="button" aria-label="Close">×</button>
+  </div>
+  <div class="sbody" id="cartBody"></div>
+  <div class="sfoot" id="cartFoot" hidden></div>
+</aside>
+
+<script src="assets/config.js"></script>
+<script src="assets/boot.js"></script>
+</body>
+</html>
