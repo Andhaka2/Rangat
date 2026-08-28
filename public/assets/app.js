@@ -324,7 +324,6 @@ function openDetail(id){
   openPanel($("#detail"));
   pixel("ViewContent", {
     content_ids: [p.id],
-    content_name: p.name,
     content_type: "product",
     value: p.price,
     currency: "INR"
@@ -340,7 +339,6 @@ function addToCart(p, size){
   syncBar();
   pixel("AddToCart", {
     content_ids: [p.id],
-    content_name: p.name,
     content_type: "product",
     value: p.price,
     currency: "INR"
@@ -356,6 +354,13 @@ function subtotal(){ return cartLines().reduce(function(s,x){ return s + x.p.pri
 function shipFee(){ var s = subtotal(); return s === 0 || s >= CONFIG.FREE_SHIPPING_ABOVE ? 0 : CONFIG.SHIPPING_FEE; }
 function grand(){ return subtotal() + shipFee(); }
 function itemCount(){ return cart.reduce(function(s,l){ return s + l.qty; }, 0); }
+function setCheckoutStep(step){
+  var was = checkoutStep;
+  checkoutStep = step;
+  if (step === 1 && was !== 1){
+    pixel("InitiateCheckout", { value: grand(), currency: "INR", num_items: itemCount() });
+  }
+}
 
 function syncBar(){
   var n = itemCount();
@@ -368,7 +373,7 @@ function syncBar(){
 
 function openCart(){ renderCart(); openPanel($("#cart")); }
 $("#cartBtn").addEventListener("click", function(){ checkoutStep = 0; openCart(); });
-$("#mobCheckout").addEventListener("click", function(){ checkoutStep = cart.length ? 1 : 0; openCart(); });
+$("#mobCheckout").addEventListener("click", function(){ setCheckoutStep(cart.length ? 1 : 0); openCart(); });
 
 function stepsHTML(){
   var labels = ["Bag","Door","Confirm"];
@@ -431,8 +436,7 @@ function renderCart(){
       '</div>' +
       '<button type="button" class="btn ink" id="toDetails">Door details</button>';
     $("#toDetails").addEventListener("click", function(){
-      checkoutStep = 1; renderCart(); body.scrollTop = 0;
-      pixel("InitiateCheckout", { value: grand(), currency: "INR", num_items: itemCount() });
+      setCheckoutStep(1); renderCart(); body.scrollTop = 0;
     });
     body.querySelector(".cartlist").addEventListener("click", function(e){
       var b = e.target.closest("[data-act]"); if (!b) return;
@@ -493,8 +497,8 @@ function renderCart(){
     foot.innerHTML =
       '<div class="totals"><div class="grand"><span>Payable</span><span>'+INR(grand())+'</span></div></div>' +
       '<div style="display:flex;gap:10px"><button type="button" class="btn line" id="backDet">Back</button><button type="button" class="btn dye" id="placeBtn" style="flex:1">Place · pay '+INR(grand())+' later</button></div>';
-    $("#editAddr").addEventListener("click", function(){ checkoutStep = 1; renderCart(); });
-    $("#backDet").addEventListener("click", function(){ checkoutStep = 1; renderCart(); });
+    $("#editAddr").addEventListener("click", function(){ setCheckoutStep(1); renderCart(); });
+    $("#backDet").addEventListener("click", function(){ setCheckoutStep(1); renderCart(); });
     $("#placeBtn").addEventListener("click", placeOrder);
   }
 }
@@ -589,12 +593,16 @@ function placeOrder(){
   var payload = orderPayload();
   order.wa = waMessage(payload);
   keepLocally(payload);
-  sendToSheet(payload).then(function(){
+  sendToSheet(payload).then(function(res){
+    if (res !== "ok"){
+      if (btn){ btn.disabled = false; btn.textContent = "Place · pay "+INR(order.total)+" later"; }
+      return;
+    }
     pixel("Purchase", {
       value: order.total,
       currency: "INR",
       content_ids: cartLines().map(function(x){ return x.p.id; }),
-      num_items: order.count
+      content_type: "product"
     });
     cart = []; saveBag(); syncBar();
     checkoutStep = 3; renderCart();
