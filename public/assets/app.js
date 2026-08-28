@@ -20,6 +20,7 @@ function pixel(ev, data){
   if (typeof fbq !== "function") return;
   try { fbq("track", ev, data || {}); } catch (e) {}
 }
+function pad(n){ return String(n).padStart(2, "0"); }
 function imgs(p){
   if (Array.isArray(p.img)) return p.img.filter(Boolean);
   return p.img ? [p.img] : [];

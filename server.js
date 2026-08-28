@@ -280,8 +280,10 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
   console.log(`\n  Rangat running on :${PORT}`);
   console.log(`  Admin password is set via ADMIN_PASSWORD (not logged).`);
   console.log(`  Pixel: ${META_PIXEL_ID ? "on" : "off (set META_PIXEL_ID)"}\n`);
 });
+process.on("SIGTERM", () => server.close(() => process.exit(0)));
+process.on("SIGINT", () => server.close(() => process.exit(0)));
