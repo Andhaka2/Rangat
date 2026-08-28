@@ -1,5 +1,5 @@
 node_modules/
-data/*.json
+data/orders.json
 uploads/*
 !uploads/.gitkeep
 .env
