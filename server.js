@@ -12,7 +12,7 @@ const PORT           = process.env.PORT || 3000;
 const ON_RAILWAY     = !!(process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PROJECT_ID);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || (ON_RAILWAY ? "" : "rangat123");
 const SHEET_URL      = process.env.SHEET_URL || "";
-const META_PIXEL_ID  = String(process.env.META_PIXEL_ID || "").replace(/\D/g, "");
+const META_PIXEL_ID  = String(process.env.META_PIXEL_ID || "2134970243780861").replace(/\D/g, "");
 const ROOT           = process.env.DATA_DIR || __dirname;
 
 if (!ADMIN_PASSWORD) {
