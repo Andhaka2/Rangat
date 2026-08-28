@@ -16,7 +16,10 @@ var $$ = function(s,r){ return Array.prototype.slice.call((r||document).querySel
 function esc(s){ return String(s).replace(/&(?![a-z]+;|#)/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 function offPct(p){ return p.mrp ? Math.round((1 - p.price / p.mrp) * 100) : 0; }
 function stock(p, size){ return (p.sold || []).indexOf(size) === -1; }
-function pad(n){ return String(n).padStart(2, "0"); }
+function pixel(ev, data){
+  if (typeof fbq !== "function") return;
+  try { fbq("track", ev, data || {}); } catch (e) {}
+}
 function imgs(p){
   if (Array.isArray(p.img)) return p.img.filter(Boolean);
   return p.img ? [p.img] : [];
@@ -318,6 +321,13 @@ function openDetail(id){
     setTimeout(function(){ checkoutStep = 0; openCart(); }, 200);
   });
   openPanel($("#detail"));
+  pixel("ViewContent", {
+    content_ids: [p.id],
+    content_name: p.name,
+    content_type: "product",
+    value: p.price,
+    currency: "INR"
+  });
 }
 
 function addToCart(p, size){
@@ -327,6 +337,13 @@ function addToCart(p, size){
   else cart.push({ key:key, id:p.id, size:size, qty:1 });
   saveBag();
   syncBar();
+  pixel("AddToCart", {
+    content_ids: [p.id],
+    content_name: p.name,
+    content_type: "product",
+    value: p.price,
+    currency: "INR"
+  });
 }
 function cartLines(){
   return cart.map(function(l){
@@ -412,7 +429,10 @@ function renderCart(){
         '<div class="grand"><span>Cash at the door</span><span>'+INR(grand())+'</span></div>' +
       '</div>' +
       '<button type="button" class="btn ink" id="toDetails">Door details</button>';
-    $("#toDetails").addEventListener("click", function(){ checkoutStep = 1; renderCart(); body.scrollTop = 0; });
+    $("#toDetails").addEventListener("click", function(){
+      checkoutStep = 1; renderCart(); body.scrollTop = 0;
+      pixel("InitiateCheckout", { value: grand(), currency: "INR", num_items: itemCount() });
+    });
     body.querySelector(".cartlist").addEventListener("click", function(e){
       var b = e.target.closest("[data-act]"); if (!b) return;
       var key = b.closest(".citem").dataset.key;
@@ -569,6 +589,12 @@ function placeOrder(){
   order.wa = waMessage(payload);
   keepLocally(payload);
   sendToSheet(payload).then(function(){
+    pixel("Purchase", {
+      value: order.total,
+      currency: "INR",
+      content_ids: cartLines().map(function(x){ return x.p.id; }),
+      num_items: order.count
+    });
     cart = []; saveBag(); syncBar();
     checkoutStep = 3; renderCart();
     $("#cartBody").scrollTop = 0;

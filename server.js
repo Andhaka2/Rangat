@@ -12,6 +12,7 @@ const PORT           = process.env.PORT || 3000;
 const ON_RAILWAY     = !!(process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PROJECT_ID);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || (ON_RAILWAY ? "" : "rangat123");
 const SHEET_URL      = process.env.SHEET_URL || "";
+const META_PIXEL_ID  = String(process.env.META_PIXEL_ID || "").replace(/\D/g, "");
 const ROOT           = process.env.DATA_DIR || __dirname;
 
 if (!ADMIN_PASSWORD) {
@@ -89,6 +90,15 @@ function serveFile(res, file, cache) {
     send(res, 200, buf, {
       "Content-Type": MIME[path.extname(file).toLowerCase()] || "application/octet-stream",
       "Cache-Control": cache || "no-store"
+    });
+  });
+}
+function serveStore(res) {
+  fs.readFile(path.join(PUBLIC, "index.html"), "utf8", (err, html) => {
+    if (err) return send(res, 404, "Not found", { "Content-Type": "text/plain" });
+    send(res, 200, html.replace(/__META_PIXEL_ID__/g, META_PIXEL_ID), {
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-store"
     });
   });
 }
@@ -254,6 +264,7 @@ const server = http.createServer(async (req, res) => {
       return serveFile(res, f, "public, max-age=31536000, immutable");
     }
     if (p === "/admin" || p === "/admin/") return serveFile(res, path.join(PUBLIC, "admin.html"));
+    if (p === "/" || p === "/index.html") return serveStore(res);
 
     const rel = p === "/" ? "/index.html" : p;
     const f = safeJoin(PUBLIC, rel);
@@ -272,5 +283,5 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, () => {
   console.log(`\n  Rangat running on :${PORT}`);
   console.log(`  Admin password is set via ADMIN_PASSWORD (not logged).`);
-  console.log(`  Sheet: ${SHEET_URL ? "connected" : "not set (orders saved locally only)"}\n`);
+  console.log(`  Pixel: ${META_PIXEL_ID ? "on" : "off (set META_PIXEL_ID)"}\n`);
 });
