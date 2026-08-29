@@ -11,7 +11,6 @@ const crypto = require("crypto");
 const PORT           = process.env.PORT || 3000;
 const ON_RAILWAY     = !!(process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PROJECT_ID);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || (ON_RAILWAY ? "" : "rangat123");
-const SHEET_URL      = process.env.SHEET_URL || "";
 const META_PIXEL_ID  = String(process.env.META_PIXEL_ID || "2134970243780861").replace(/\D/g, "");
 const ROOT           = process.env.DATA_DIR || __dirname;
 
@@ -19,11 +18,20 @@ if (!ADMIN_PASSWORD) {
   console.error("Set ADMIN_PASSWORD in Railway Variables. Do not commit it to GitHub.");
   process.exit(1);
 }
+function sheetUrlFromConfig() {
+  try {
+    const src = fs.readFileSync(path.join(__dirname, "public", "assets", "config.js"), "utf8");
+    const m = src.match(/SHEET_URL:\s*"([^"]*)"/);
+    return (m && m[1].trim()) || "";
+  } catch { return ""; }
+}
+const SHEET_URL = (process.env.SHEET_URL || sheetUrlFromConfig()).trim();
 const PUBLIC   = path.join(__dirname, "public");
 const UPLOADS  = path.join(ROOT, "uploads");
 const DATA     = path.join(ROOT, "data");
 const PRODUCTS = path.join(DATA, "products.json");
 const ORDERS   = path.join(DATA, "orders.json");
+const BUNDLED_PRODUCTS = path.join(__dirname, "data", "products.json");
 
 for (const d of [UPLOADS, DATA]) fs.mkdirSync(d, { recursive: true });
 
@@ -37,8 +45,15 @@ function writeJSON(file, value) {
   fs.writeFileSync(tmp, JSON.stringify(value, null, 2));
   fs.renameSync(tmp, file);
 }
+if (!fs.existsSync(ORDERS)) writeJSON(ORDERS, []);
+(function seedCatalogue() {
+  const bundled = readJSON(BUNDLED_PRODUCTS, []);
+  if (!bundled.length) return;
+  const current = fs.existsSync(PRODUCTS) ? readJSON(PRODUCTS, []) : [];
+  if (current.length) return;
+  if (PRODUCTS !== BUNDLED_PRODUCTS) writeJSON(PRODUCTS, bundled);
+})();
 if (!fs.existsSync(PRODUCTS)) writeJSON(PRODUCTS, []);
-if (!fs.existsSync(ORDERS))   writeJSON(ORDERS, []);
 
 /* ---------- sessions ---------- */
 const sessions = new Set();
@@ -116,10 +131,23 @@ async function toSheet(order) {
     const r = await fetch(SHEET_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(order)
+      body: JSON.stringify(order),
+      redirect: "follow"
     });
-    return r.ok ? "ok" : "http-" + r.status;
-  } catch (e) { return "failed"; }
+    const text = await r.text();
+    if (!r.ok) {
+      console.error("sheet http", r.status);
+      return "http-" + r.status;
+    }
+    try {
+      const j = JSON.parse(text);
+      if (j && j.ok === false) return "script-error";
+    } catch { /* some scripts return empty 200 */ }
+    return "ok";
+  } catch (e) {
+    console.error("sheet:", e.message);
+    return "failed";
+  }
 }
 
 /* ---------- routes ---------- */
@@ -174,9 +202,9 @@ const server = http.createServer(async (req, res) => {
       if (!/^\d{6}$/.test(order.pincode))    return json(res, 400, { ok: false, error: "bad pincode" });
 
       const orders = readJSON(ORDERS, []);
+      order.sheet = await toSheet(order);
       orders.push(order);
       writeJSON(ORDERS, orders);
-      order.sheet = await toSheet(order);
       return json(res, 200, { ok: true, orderId: order.orderId, total: order.total });
     }
 
@@ -283,6 +311,7 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`\n  Rangat running on :${PORT}`);
   console.log(`  Admin password is set via ADMIN_PASSWORD (not logged).`);
+  console.log(`  Sheet: ${SHEET_URL ? "on" : "off (set SHEET_URL or config.js)"}`);
   console.log(`  Pixel: ${META_PIXEL_ID ? "on" : "off (set META_PIXEL_ID)"}\n`);
 });
 process.on("SIGTERM", () => server.close(() => process.exit(0)));

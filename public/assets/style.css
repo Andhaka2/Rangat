@@ -120,6 +120,16 @@ header.site{
   padding-top:28px; padding-bottom:36px;
   border-bottom:1px solid var(--rule);
 }
+@media(max-width:767px){
+  .hero{
+    max-height:70vh;
+    overflow:hidden;
+    gap:12px;
+    padding-top:16px;
+    padding-bottom:16px;
+  }
+}
+#shop{scroll-margin-top:72px}
 @media(min-width:720px){
   .hero{
     grid-template-columns: 1.1fr .9fr;

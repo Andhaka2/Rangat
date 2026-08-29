@@ -10,7 +10,7 @@ var CONFIG = {
      https://script.google.com/macros/s/AKfy..../exec
      Leave "" while testing — orders will still show a confirmation
      and be kept in the browser, they just won't reach the Sheet. */
-  SHEET_URL: "https://script.google.com/macros/s/AKfycbyLagSfIuAXT3kHzW7WbLQO-vJPjgEqNwLXC9jhlsl4xFd7DxgS4X0cnHAHCpXP73G_Ow/exec",
+  SHEET_URL: "https://script.google.com/macros/s/AKfycbwPB4B8gKFQ33bcBfh6siRA2MXn7gs3ZwIF3Y63Drq1_6x0UCwC52I9Aj3DUJdD05EJ/exec",
 
   /* Your WhatsApp number for the "Order on WhatsApp" fallback.
      Country code + number, digits only. Example: 919876543210 */

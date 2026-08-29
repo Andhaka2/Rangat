@@ -7,7 +7,10 @@
     "cost": 307,
     "price": 519,
     "mrp": null,
-    "img": [],
+    "img": [
+      "/images/rg01-1.jpg",
+      "/images/rg01-2.jpg"
+    ],
     "hue": 355,
     "rating": 4.4,
     "reviews": 6240,
@@ -26,7 +29,10 @@
     "cost": 272,
     "price": 459,
     "mrp": null,
-    "img": [],
+    "img": [
+      "/images/rg02-1.jpg",
+      "/images/rg02-2.jpg"
+    ],
     "hue": 2,
     "rating": 4.3,
     "reviews": 2950,
@@ -45,7 +51,10 @@
     "cost": 377,
     "price": 629,
     "mrp": null,
-    "img": [],
+    "img": [
+      "/images/rg03-1.jpg",
+      "/images/rg03-2.jpg"
+    ],
     "hue": 340,
     "rating": 4.3,
     "reviews": 1349,
@@ -73,7 +82,7 @@
     "sold": [],
     "source": "https://www.meesho.com/ajrakh-print-latest-cotton-trendy-corset-back-kurti/p/eyj738",
     "desc": "Red printed short kurti with a contrast border and corset back. Dressy enough for an evening out.",
-    "active": true
+    "active": false
   },
   {
     "id": "RG05",
@@ -83,7 +92,10 @@
     "cost": 287,
     "price": 479,
     "mrp": null,
-    "img": [],
+    "img": [
+      "/images/rg05-1.jpg",
+      "/images/rg05-2.jpg"
+    ],
     "hue": 335,
     "rating": 4.3,
     "reviews": 511,
@@ -102,7 +114,10 @@
     "cost": 290,
     "price": 489,
     "mrp": null,
-    "img": [],
+    "img": [
+      "/images/rg06-1.jpg",
+      "/images/rg06-2.jpg"
+    ],
     "hue": 35,
     "rating": 4.1,
     "reviews": 409,
@@ -121,7 +136,10 @@
     "cost": 317,
     "price": 529,
     "mrp": null,
-    "img": [],
+    "img": [
+      "/images/rg07-1.jpg",
+      "/images/rg07-2.jpg"
+    ],
     "hue": 175,
     "rating": 4.1,
     "reviews": 226,
@@ -140,7 +158,10 @@
     "cost": 295,
     "price": 499,
     "mrp": null,
-    "img": [],
+    "img": [
+      "/images/rg08-1.jpg",
+      "/images/rg08-2.jpg"
+    ],
     "hue": 25,
     "rating": 4.2,
     "reviews": 213,
@@ -168,7 +189,7 @@
     "sold": [],
     "source": "https://www.meesho.com/new-corset-kurti-with-bell-sleeves-back-tie-up-kurti/p/fo5uko",
     "desc": "Brown floral short kurti with a square neck and tie-up corset back. An easy everyday piece.",
-    "active": true
+    "active": false
   },
   {
     "id": "RG10",
@@ -178,7 +199,10 @@
     "cost": 311,
     "price": 519,
     "mrp": null,
-    "img": [],
+    "img": [
+      "/images/rg10-1.jpg",
+      "/images/rg10-2.jpg"
+    ],
     "hue": 75,
     "rating": 4,
     "reviews": 1365,
@@ -206,7 +230,7 @@
     "sold": [],
     "source": "",
     "desc": "Dark brown short kurti with a cream and pink motif print. Keyhole neck and wide bell sleeves.",
-    "active": true
+    "active": false
   },
   {
     "id": "RG12",
@@ -225,6 +249,6 @@
     "sold": [],
     "source": "",
     "desc": "Brown floral print short kurti with a square neck and a tie-up corset back.",
-    "active": true
+    "active": false
   }
 ]
